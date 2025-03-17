@@ -5,10 +5,9 @@ from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
 from flask import Flask
 from threading import Thread
-import nest_asyncio  # Add this line
+import nest_asyncio
 
-# Allow nested event loops
-nest_asyncio.apply()
+nest_asyncio.apply()  # Fix event loop issues
 
 app = Flask(__name__)
 
@@ -23,16 +22,29 @@ BOT_TOKEN = os.environ['BOT_TOKEN']
 
 def load_posts():
     try:
+        # Load current posts
         with open("posts.json", "r") as f:
-            return json.load(f)
-    except:
+            current_posts = json.load(f)
+        
+        # Load old posts (if file exists)
+        try:
+            with open("old_post.json", "r") as f:
+                old_posts = json.load(f)
+        except FileNotFoundError:
+            old_posts = {}
+        
+        # Merge both (current posts override old ones)
+        return {**old_posts, **current_posts}
+        
+    except Exception as e:
+        print(f"Error loading posts: {e}")
         return {}
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not context.args:
         await update.message.reply_text(
             "🚫 Direct access not allowed!\n\n"
-            "Visit our website:\nhttps://www.moviewave.online/"
+            "Visit: https://www.moviewave.online/"
         )
         return
 
@@ -43,10 +55,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 async def main():
-    # Start Flask in a separate thread
     Thread(target=run_flask).start()
-    
-    # Start Telegram bot
     bot_app = Application.builder().token(BOT_TOKEN).build()
     bot_app.add_handler(CommandHandler("start", start))
     await bot_app.run_polling()
