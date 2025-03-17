@@ -3,10 +3,13 @@ import json
 import asyncio
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
-from flask import Flask  # Add this line
+from flask import Flask
 from threading import Thread
+import nest_asyncio  # Add this line
 
-# Initialize Flask server
+# Allow nested event loops
+nest_asyncio.apply()
+
 app = Flask(__name__)
 
 @app.route('/')
@@ -40,7 +43,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 async def main():
-    # Start Flask server in a separate thread
+    # Start Flask in a separate thread
     Thread(target=run_flask).start()
     
     # Start Telegram bot
