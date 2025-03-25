@@ -48,7 +48,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
 
-    post_id = context.args[0].upper()
+    post_id = context.args[0]
     posts = load_posts()
     await update.message.reply_text(
         posts[post_id]["download_url"] if post_id in posts else "❌ Invalid Link!"
