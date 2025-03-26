@@ -8,15 +8,9 @@ from telegram.helpers import escape_markdown
 from flask import Flask
 from threading import Thread
 
-# ================== CONFIGURATION ================== #
-DELETE_AFTER_SECONDS = 300  # 5 minutes
-MESSAGE_TEMPLATE = """🎬 *{title}*
-📅 {date}
-
-🔗 {link}
-
-_This message auto-deletes in {minutes}m_"""
-# ==================================================== #
+# ================== TIMER CONFIG HERE ================== #
+DELETE_AFTER_SECONDS = 300  # CHANGE THIS VALUE (IN SECONDS)
+# ======================================================== #
 
 app = Flask(__name__)
 
@@ -52,19 +46,18 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text("🚫 Direct access not allowed!\nVisit: https://www.moviewave.online/")
             return
 
-        # Case-insensitive matching and URL decoding
         raw_id = unquote(context.args[0]).strip().upper()
         posts = load_posts()
         post_id = next((k for k in posts.keys() if k.upper() == raw_id), None)
 
         if post_id:
             post = posts[post_id]
-            message = MESSAGE_TEMPLATE.format(
-                title=escape_markdown(post['title'], version=2),
-                date=escape_markdown(post.get('date', 'N/A'), version=2),
-                link=post['download_url'],
-                minutes=DELETE_AFTER_SECONDS // 60
-            )
+            message = f"""🎬 *{escape_markdown(post['title'], version=2)}*
+📅 {escape_markdown(post.get('date', 'N/A'), version=2)}
+
+🔗 {post['download_url']}
+
+_This message auto-deletes in {DELETE_AFTER_SECONDS // 60}m_"""
             msg = await update.message.reply_text(message, parse_mode='MarkdownV2')
             context.job_queue.run_once(
                 delete_message,
@@ -80,14 +73,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("⚠️ Service temporary unavailable. Try again later.")
 
 async def main():
-    # Initialize bot
     bot_app = Application.builder().token(BOT_TOKEN).build()
     bot_app.add_handler(CommandHandler("start", start))
-    
-    # Start Flask in separate thread
     Thread(target=run_flask, daemon=True).start()
-    
-    # Start polling
     await bot_app.initialize()
     await bot_app.start()
     print("Bot is now running...")
