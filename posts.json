@@ -1,143 +1,18 @@
 {
     "POST1": {
         "title": "kya masti kya dhoom",
-        "download_url": "https://mega.nz/file/c9pSwbaS#lx6tTRWiUqfU8udJG4hbWUPwQgXDjPjE9GKDKcBkNPs",
-        "date": "2025-03-25"
+        "download_url": [
+            "https://mega.nz/file/c9pSwbaS#lx6tTRWiUqfU8udJG4hbWUPwQgXDjPjE9GKDKcBkNPs",
+            "https://t.me/moviewave101"
+        ],
+        "date": "2025-03-26"
     },
-    "POST1a": {
+    "POST1A": {
         "title": "kya masti kya dhoom",
-        "download_url": "https://go.arlinks.in/ctjq2S6",
-        "date": "2025-03-15"
-    },
-    "POST2": {
-        "title": "maidaan",
-        "download_url": "https://mega.nz/file/x4g31IRB#l8zKF4i3thPTVP5bOS6En8VVa35c4OLXQbivXOb4HVc",
-        "download_url": "https://go.arlinks.in/frfxzIJ7",
-        "date": "2025-03-16"
-    },
-     "POST2a": {
-        "title": "maidaan",
-        "download_url": "https://go.arlinks.in/frfxzIJ7",
-        "date": "2025-03-16"
-    },
-     "POST3": {
-        "title": "madgaon",
-        "download_url": "https://mega.nz/file/x4g31IRB#l8zKF4i3thPTVP5bOS6En8VVa35c4OLXQbivXOb4HVc",
-        "date": "2025-03-16"
-     },
-    "POST3a": {
-        "title": "madgaon",
-        "download_url": "https://go.arlinks.in/ByHNid03",
-        "date": "2025-03-16"
-     },
-     "POST4": {
-        "title": "sarfira",
-        "download_url": "https://mega.nz/file/Fg4CRB5J#h6N8EOePq-kxtO05ya8yzOMfCfSLNk1KydjWxkh_iJ0",
-        "date": "2025-03-16"
-     },
-     "POST4.1": {
-        "title": "sarfira",
-        "download_url": "https://go.arlinks.in/ggP6",
-        "date": "2025-03-16"
-     },
-     "POST5": {
-        "title": "Ulajh",
-        "download_url": "https://mega.nz/file/B8wXlAaQ#GzYELg5VfnBF0Md4yRkLId397s9WpvzIZ31jhK3-VNE",
-        "date": "2025-03-16"
-     },
-     "POST5.1": {
-        "title": "Ulajh",
-        "download_url": "https://go.arlinks.in/o6chB4Y",
-        "date": "2025-03-16"
-     },
-     "POST6": {
-        "title": "Vedaa",
-        "download_url": "https://mega.nz/file/1owjUB4T#ExARwBmdn169eGBUaQViwJZh22uDENFIL0frjQucJCY",
-        "date": "2025-03-16"
-     },
-     "POST6.1": {
-        "title": "Vedaa",
-        "download_url": "https://go.arlinks.in/h7xYU",
-        "date": "2025-03-16"
-     },
-     "POST7": {
-        "title": "Saale aashiq",
-        "download_url": "https://mega.nz/file/F5Qw2JRJ#jXDOKV-bfFJd1iiRra-ljXE8ZOJlcHi1iKf-kF9VGvM",
-        "date": "2025-03-16"
-     },
-     "POST7.1": {
-        "title": "Saale aashiq",
-        "download_url": "https://go.arlinks.in/U88TkQB",
-        "date": "2025-03-16"
-     },
-     "POST8": {
-        "title": "Sector 36",
-        "download_url": "https://mega.nz/file/MgQygKIT#g3d7LQoMmIiljqDZ-PiUHKIJBgnM58AOQf4L9JZw1yg",
-        "date": "2025-03-16"
-     },
-     "POST8.1": {
-        "title": "Sector 36",
-        "download_url": "https://go.arlinks.in/B7Ut",
-        "date": "2025-03-16"
-     },
-     "POST9": {
-        "title": "Saitaan",
-        "download_url": "https://mega.nz/file/QgQWTQDB#xtQE3t_gORikgs1KQRf1rJmlg3Ri6WI3zHWeT9Bq4bs",
-        "date": "2025-03-16"
-     },
-     "POST9.1": {
-        "title": "Saitaan",
-        "download_url": "https://go.arlinks.in/xHZr6La",
-        "date": "2025-03-16"
-     },
-     "POST10": {
-        "title": "Srikanth",
-        "download_url": "https://mega.nz/file/IhRG2SDQ#yp90WZEkhyIy1uTt4TmqIeEO7NIXuNFRcPvsN4v8hZc",
-        "date": "2025-03-16"
-     },
-     "POST10.1": {
-        "title": "Srikanth",
-        "download_url": "https://go.arlinks.in/vBwMxFm",
-        "date": "2025-03-16"
-     },
-     "POST11": {
-        "title": "Swatantrya Veer Savarkar",
-        "download_url": "https://mega.nz/file/RxglVCrR#sxJSvGGvplOKGKkHax9vHRm4Kh-ytvdOqEcpge08U0Q",
-        "date": "2025-03-16"
-     },
-     "POST11.1": {
-        "title": "Swatantrya Veer Savarkar",
-        "download_url": "https://go.arlinks.in/D58T",
-        "date": "2025-03-16"
-     },
-     "POST12": {
-        "title": "the sabarmati report",
-        "download_url": "https://mega.nz/file/4homyKDC#avKElGundH_1tbM2tpXzIK5i-GRuRoibKKdKcz7ZuEc",
-        "date": "2025-03-16"
-     },
-     "POST12.1": {
-        "title": "The sabarmati report",
-        "download_url": "https://go.arlinks.in/kovVv",
-        "date": "2025-03-16"
-     },
-     "POST13": {
-        "title": "Vedaa",
-        "download_url": "https://vplink.in/TEJNkDlS",
-        "date": "2025-03-16"
-     },
-     "POST13.1": {
-        "title": "Vedaa",
-        "download_url": "https://vplink.in/TEJNkDlS",
-        "date": "2025-03-16"
-     },
-     "POST14": {
-        "title": "Vedaa",
-        "download_url": "https://vplink.in/TEJNkDlS",
-        "date": "2025-03-16"
-     },
-     "POST14.1": {
-        "title": "Vedaa",
-        "download_url": "https://vplink.in/TEJNkDlS",
-        "date": "2025-03-16"
-     }
+        "download_url": [
+            "https://go.arlinks.in/ctjq2S6",
+            "https://t.me/moviewave101"
+        ],
+        "date": "2025-03-26"
+    }
 }
