@@ -3,36 +3,62 @@ import json
 import asyncio
 import nest_asyncio
 from urllib.parse import unquote
+from datetime import datetime
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes, CallbackContext
 from flask import Flask
 from threading import Thread
 
-# Apply nest_asyncio for Render compatibility
 nest_asyncio.apply()
 
-# Initialize Flask
 app = Flask(__name__)
+
+# ========== CONFIG ========== #
+DELETE_AFTER_HOURS = 24  # Auto-delete timer (change here)
+PORT = 10000
+# ============================ #
 
 @app.route('/')
 def home():
     return "Bot is running!"
 
 def run_flask():
-    app.run(host='0.0.0.0', port=10000)
+    app.run(host='0.0.0.0', port=PORT)
 
-# Telegram Bot
 BOT_TOKEN = os.environ['BOT_TOKEN']
-
-# ========== CONFIG ========== #
-DELETE_AFTER_MINUTES = 1 # 24 hours (Change this value)
-# ============================ #
 
 def load_posts():
     try:
+        # Load and auto-clean old posts
         with open("posts.json", "r") as f:
-            return json.load(f)
-    except:
+            current = json.load(f)
+            
+        old_posts = {}
+        try:
+            with open("old_post.json", "r") as f:
+                old_posts = json.load(f)
+        except FileNotFoundError:
+            pass
+
+        # Move posts older than 7 days
+        today = datetime.now()
+        to_move = []
+        for pid in list(current.keys()):
+            post_date = datetime.strptime(current[pid]["date"], "%Y-%m-%d")
+            if (today - post_date).days > 7:
+                old_posts[pid] = current.pop(pid)
+                to_move.append(pid)
+
+        if to_move:
+            with open("old_post.json", "w") as f:
+                json.dump(old_posts, f)
+            with open("posts.json", "w") as f:
+                json.dump(current, f)
+
+        return {**old_posts, **current}
+        
+    except Exception as e:
+        print(f"Post error: {e}")
         return {}
 
 async def delete_message(context: CallbackContext):
@@ -45,46 +71,48 @@ async def delete_message(context: CallbackContext):
         pass
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if not context.args:
-        await update.message.reply_text(
-            "🚫 Direct access not allowed!\n\n"
-            "Visit: https://www.moviewave.online/"
-        )
-        return
+    try:
+        if not context.args:
+            await update.message.reply_text("🚫 Direct access not allowed!\nVisit: https://www.moviewave.online/")
+            return
 
-    raw_id = unquote(context.args[0]).upper()
-    posts = load_posts()
-    
-    if raw_id in posts:
-        post = posts[raw_id]
-        message = f"🎬 *{post['title']}*\n📅 {post['date']}\n\n"
+        post_id = unquote(context.args[0]).upper()
+        posts = load_posts()
         
-        # Handle multiple links
-        if isinstance(post['download_url'], list):
-            for i, link in enumerate(post['download_url'], 1):
-                message += f"🔗 Part {i}: {link}\n\n"
-        else:
-            message += f"🔗 {post['download_url']}\n\n"
+        if post_id in posts:
+            post = posts[post_id]
+            msg_content = f"🎬 *{post['title']}*\n📅 {post['date']}\n\n"
             
-        message += f"_⚠️ Links auto-delete in {DELETE_AFTER_MINUTES//60} hours_"
-        
-        msg = await update.message.reply_text(message, parse_mode='Markdown')
-        
-        # Schedule deletion
-        context.job_queue.run_once(
-            delete_message,
-            DELETE_AFTER_MINUTES * 60,
-            chat_id=msg.chat_id,
-            message_id=msg.message_id
-        )
-    else:
-        await update.message.reply_text("❌ Invalid link!")
+            # Handle multiple links
+            if isinstance(post['download_url'], list):
+                for i, link in enumerate(post['download_url'], 1):
+                    msg_content += f"🔗 Part {i}: {link}\n\n"
+            elif isinstance(post['download_url'], dict):
+                for name, link in post['download_url'].items():
+                    msg_content += f"➤ {name}: {link}\n\n"
+            else:
+                msg_content += f"🔗 {post['download_url']}\n\n"
+            
+            msg_content += f"_⏳ Auto-deletes in {DELETE_AFTER_HOURS} hours_"
+            
+            msg = await update.message.reply_text(msg_content, parse_mode='Markdown')
+            
+            # Schedule deletion
+            context.job_queue.run_once(
+                delete_message,
+                DELETE_AFTER_HOURS * 3600,
+                chat_id=msg.chat_id,
+                message_id=msg.message_id
+            )
+        else:
+            await update.message.reply_text("❌ Invalid link!")
+            
+    except Exception as e:
+        print(f"Error: {e}")
+        await update.message.reply_text("⚠️ Temporary error. Try again!")
 
 async def main():
-    # Start Flask in separate thread
     Thread(target=run_flask, daemon=True).start()
-    
-    # Start Telegram bot
     bot_app = Application.builder().token(BOT_TOKEN).build()
     bot_app.add_handler(CommandHandler("start", start))
     await bot_app.run_polling()
