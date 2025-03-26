@@ -29,7 +29,6 @@ def load_posts():
     try:
         with open("posts.json", "r") as f:
             data = json.load(f)
-            # Validate post IDs match expected format
             return {k: v for k, v in data.items() if POST_ID_PATTERN.match(k)}
     except Exception as e:
         print(f"Error loading posts: {e}")
@@ -53,11 +52,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
             )
             return
 
-        # Decode and normalize post ID
         raw_id = unquote(context.args[0]).strip().upper().replace('%2E', '.')
         posts = load_posts()
-        
-        # Find matching post (case-insensitive)
         post_id = next(
             (k for k in posts.keys() if k.upper() == raw_id.upper()),
             None
@@ -78,7 +74,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 disable_web_page_preview=True
             )
             
-            # Schedule deletion
             context.job_queue.run_once(
                 delete_message,
                 DELETE_AFTER_SECONDS,
@@ -100,14 +95,11 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
 def main():
-    # Initialize bot
     bot_app = Application.builder().token(os.environ['BOT_TOKEN']).build()
     bot_app.add_handler(CommandHandler("start", start))
     
-    # Start Flask in separate thread
     Thread(target=run_flask, daemon=True).start()
     
-    # Start polling
     print("Bot starting...")
     bot_app.run_polling()
 
