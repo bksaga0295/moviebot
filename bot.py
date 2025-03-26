@@ -1,17 +1,17 @@
 import os
 import json
 import asyncio
-import nest_asyncio
 from urllib.parse import unquote
 from telegram import Update
-from telegram.ext import Application, CommandHandler, ContextTypes
+from telegram.ext import Application, CommandHandler, ContextTypes, CallbackContext
+from telegram.helpers import escape_markdown
 from flask import Flask
 from threading import Thread
 
-# Apply nest_asyncio for Render compatibility
-nest_asyncio.apply()
+# ================== TIMER CONFIG HERE ================== #
+DELETE_AFTER_SECONDS = 120  # CHANGE THIS VALUE (IN SECONDS)
+# ======================================================== #
 
-# Initialize Flask
 app = Flask(__name__)
 
 @app.route('/')
@@ -21,41 +21,64 @@ def home():
 def run_flask():
     app.run(host='0.0.0.0', port=10000)
 
-# Telegram Bot
 BOT_TOKEN = os.environ['BOT_TOKEN']
 
 def load_posts():
     try:
         with open("posts.json", "r") as f:
             return json.load(f)
-    except:
+    except Exception as e:
+        print(f"Error loading posts: {e}")
         return {}
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if not context.args:
-        await update.message.reply_text(
-            "🚫 Direct access not allowed!\n\n"
-            "Visit: https://www.moviewave.online/"  # Your original website link maintained
+async def delete_message(context: CallbackContext):
+    try:
+        await context.bot.delete_message(
+            chat_id=context.job.chat_id,
+            message_id=context.job.message_id
         )
-        return
+    except Exception as e:
+        print(f"Delete error: {e}")
 
-    post_id = unquote(context.args[0]).upper()
-    posts = load_posts()
-    
-    if post_id in posts:
-        post = posts[post_id]
-        message = f"🎬 *{post['title']}*\n\n🔗 {post['download_url']}"
-        await update.message.reply_text(message, parse_mode='Markdown')
-    else:
-        await update.message.reply_text("❌ Invalid link!")
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    try:
+        if not context.args:
+            await update.message.reply_text("🚫 Direct access not allowed!\nVisit: https://www.moviewave.online/")
+            return
+
+        raw_id = unquote(context.args[0]).strip().upper()
+        posts = load_posts()
+        post_id = next((k for k in posts.keys() if k.upper() == raw_id), None)
+
+        if post_id:
+            post = posts[post_id]
+            message = f"""🎬 *{escape_markdown(post['title'], version=2)}*
+📅 {escape_markdown(post.get('date', 'N/A'), version=2)}
+
+🔗 {post['download_url']}
+
+_This message auto-deletes in {DELETE_AFTER_SECONDS // 60}m_"""
+            msg = await update.message.reply_text(message, parse_mode='MarkdownV2')
+            context.job_queue.run_once(
+                delete_message,
+                DELETE_AFTER_SECONDS,
+                chat_id=msg.chat_id,
+                message_id=msg.message_id
+            )
+        else:
+            await update.message.reply_text("❌ Invalid link! Use buttons from website.")
+            
+    except Exception as e:
+        print(f"Command error: {e}")
+        await update.message.reply_text("⚠️ Service temporary unavailable. Try again later.")
 
 async def main():
-    # Start Flask in separate thread
-    Thread(target=run_flask, daemon=True).start()
-    
-    # Start Telegram bot
     bot_app = Application.builder().token(BOT_TOKEN).build()
     bot_app.add_handler(CommandHandler("start", start))
+    Thread(target=run_flask, daemon=True).start()
+    await bot_app.initialize()
+    await bot_app.start()
+    print("Bot is now running...")
     await bot_app.run_polling()
 
 if __name__ == "__main__":
