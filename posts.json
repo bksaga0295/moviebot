@@ -1,10 +1,10 @@
 {
-    "POST1": {
+     "POST1": {
         "title": "Kya Masti Kya Dhoom",
-        "download_url": [
+        "download_url": {
             "https://mega.nz/file/c9pSwbaS#lx6tTRWiUqfU8udJG4hbWUPwQgXDjPjE9GKDKcBkNPs",
-            "https://t.me/moviewave101"
-        ],
+           "Click for more": "https://t.me/moviewave101"
+        },
         "date": "2025-03-26"
     },
    "POST1A": {
