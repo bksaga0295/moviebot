@@ -137,10 +137,10 @@
     },
      "POST9A": {
         "title": "Saitaan",
-        "download_url": [
+        "download_url": {
             "https://go.arlinks.in/xHZr6La",
             "Click for more": "https://t.me/moviewave101"
-        ],
+        },
         "date": "2025-03-26"
     },
    "POST10": {
