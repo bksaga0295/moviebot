@@ -1,18 +1,194 @@
 {
     "POST1": {
-        "title": "kya masti kya dhoom",
+        "title": "Kya Masti Kya Dhoom",
         "download_url": [
-            "1080": "https://mega.nz/file/c9pSwbaS#lx6tTRWiUqfU8udJG4hbWUPwQgXDjPjE9GKDKcBkNPs",
-            "Click for more": "https://backup.link/example"
+            "https://mega.nz/file/c9pSwbaS#lx6tTRWiUqfU8udJG4hbWUPwQgXDjPjE9GKDKcBkNPs",
+           "https://t.me/moviewave101""
         ],
         "date": "2025-03-25"
     },
     "POST1A": {
-        "title": "kya masti kya dhoom",
+        "title": "Kya Masti Kya Dhoom",
         "download_url": [
-           "1080": "https://go.arlinks.in/ctjq2S6",
-           "Click for more": "https://alternate.link/example"
+           "https://go.arlinks.in/ctjq2S6",
+           "https://t.me/moviewave101"
         ],
         "date": "2025-03-15"
+    },
+    "POST2": {
+        "title": "Maidaan",
+        "download_url": [
+            "https://mega.nz/file/x4g31IRB#l8zKF4i3thPTVP5bOS6En8VVa35c4OLXQbivXOb4HVc",
+            "https://t.me/moviewave101"
+        ],
+        "date": "2025-03-25"
+    },
+    "POST2A": {
+        "title": "kya masti kya dhoom",
+        "download_url": [
+            "https://go.arlinks.in/frfxzIJ7",
+           "https://t.me/moviewave101"
+        ],
+        "date": "2025-03-25"
+    },
+    "POST3": {
+        "title": "Madgaon",
+        "download_url": [
+            "https://mega.nz/file/x4g31IRB#l8zKF4i3thPTVP5bOS6En8VVa35c4OLXQbivXOb4HVc",
+            "https://t.me/moviewave101"
+        ],
+        "date": "2025-03-25"
+    },
+    "POST3A": {
+        "title": "Madgaon",
+        "download_url": [
+            "https://go.arlinks.in/ByHNid03",
+            "https://t.me/moviewave101"
+        ],
+        "date": "2025-03-25"
+    },
+    "POST4": {
+        "title": "Sarfira",
+        "download_url": [
+            "https://mega.nz/file/Fg4CRB5J#h6N8EOePq-kxtO05ya8yzOMfCfSLNk1KydjWxkh_iJ0",
+            "https://t.me/moviewave101"
+        ],
+        "date": "2025-03-25"
+    },
+    "POST4A": {
+        "title": "Sarfira",
+        "download_url": [
+            "https://go.arlinks.in/ggP6",
+            "https://t.me/moviewave101"
+        ],
+        "date": "2025-03-25"
+    },
+    "POST5": {
+        "title": "Ulajh",
+        "download_url": [
+            "https://mega.nz/file/B8wXlAaQ#GzYELg5VfnBF0Md4yRkLId397s9WpvzIZ31jhK3-VNE",
+            "https://t.me/moviewave101"
+        ],
+        "date": "2025-03-25"
+    },
+    "POST5A": {
+        "title": "Ulajh",
+        "download_url": [
+            "https://go.arlinks.in/o6chB4Y",
+            "https://t.me/moviewave101"
+        ],
+        "date": "2025-03-25"
+    },
+    "POST6": {
+        "title": "Vedaa",
+        "download_url": [
+            "https://mega.nz/file/1owjUB4T#ExARwBmdn169eGBUaQViwJZh22uDENFIL0frjQucJCY",
+            "https://t.me/moviewave101"
+        ],
+        "date": "2025-03-25"
+    },
+    "POST6A": {
+        "title": "kya masti kya dhoom",
+        "download_url": [
+            "https://go.arlinks.in/h7xYU",
+            "https://t.me/moviewave101"
+        ],
+        "date": "2025-03-25"
+    },
+    "POST7": {
+        "title": "Saale Aashiq",
+        "download_url": [
+            "https://mega.nz/file/c9pSwbaS#lx6tTRWiUqfU8udJG4hbWUPwQgXDjPjE9GKDKcBkNPs",
+            "https://t.me/moviewave101"
+        ],
+        "date": "2025-03-25"
+    },
+    "POST7A": {
+        "title": "Saale Aashiq",
+        "download_url": [
+            "https://go.arlinks.in/U88TkQB",
+            "https://t.me/moviewave101"
+        ],
+        "date": "2025-03-25"
+    },
+    "POST8": {
+        "title": "Sector 36",
+        "download_url": [
+            "https://mega.nz/file/MgQygKIT#g3d7LQoMmIiljqDZ-PiUHKIJBgnM58AOQf4L9JZw1yg",
+            "https://t.me/moviewave101"
+        ],
+        "date": "2025-03-25"
+    },
+    "POST8A": {
+        "title": "Sector 36",
+        "download_url": [
+            "https://go.arlinks.in/B7Ut",
+            "https://t.me/moviewave101"
+        ],
+        "date": "2025-03-25"
+    },
+    "POST9": {
+        "title": "Saitaan",
+        "download_url": [
+            "https://mega.nz/file/QgQWTQDB#xtQE3t_gORikgs1KQRf1rJmlg3Ri6WI3zHWeT9Bq4bs",
+            "https://t.me/moviewave101"
+        ],
+        "date": "2025-03-25"
+    },
+    "POST9A": {
+        "title": "Saitaan",
+        "download_url": [
+            "https://go.arlinks.in/xHZr6La",
+            "https://t.me/moviewave101"
+        ],
+        "date": "2025-03-25"
+    },
+    "POST10": {
+        "title": "Srikanth",
+        "download_url": [
+            "https://mega.nz/file/IhRG2SDQ#yp90WZEkhyIy1uTt4TmqIeEO7NIXuNFRcPvsN4v8hZc",
+            "https://t.me/moviewave101"
+        ],
+        "date": "2025-03-25"
+    },
+    "POST10A": {
+        "title": "Srikanth",
+        "download_url": [
+            "https://go.arlinks.in/vBwMxFm",
+            "https://t.me/moviewave101"
+        ],
+        "date": "2025-03-25"
+    },
+    "POST11": {
+        "title": "Swatantrya Veer Savarkar",
+        "download_url": [
+            "https://mega.nz/file/RxglVCrR#sxJSvGGvplOKGKkHax9vHRm4Kh-ytvdOqEcpge08U0Q",
+            "https://t.me/moviewave101"
+        ],
+        "date": "2025-03-25"
+    },
+     "POST11A": {
+        "title": "Swatantrya Veer Savarkar",
+        "download_url": [
+            "https://go.arlinks.in/D58T",
+            "https://t.me/moviewave101"
+        ],
+        "date": "2025-03-25"
+    },
+     "POST12": {
+        "title": "The sabarmati report",
+        "download_url": [
+            "https://mega.nz/file/4homyKDC#avKElGundH_1tbM2tpXzIK5i-GRuRoibKKdKcz7ZuEc",
+            "https://t.me/moviewave101"
+        ],
+        "date": "2025-03-25"
+    },
+     "POST12A": {
+        "title": "The sabarmati report",
+        "download_url": [
+            "https://go.arlinks.in/kovVv",
+            "https://t.me/moviewave101"
+        ],
+        "date": "2025-03-25"
     }
 }
