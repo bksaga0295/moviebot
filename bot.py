@@ -8,18 +8,19 @@ from telegram.helpers import escape_markdown
 from flask import Flask
 from threading import Thread
 
-# ================== TIMER CONFIG HERE ================== #
-DELETE_AFTER_SECONDS = 300  # CHANGE THIS VALUE (IN SECONDS)
-# ======================================================== #
+# ================== CONFIGURATION ================== #
+DELETE_AFTER_SECONDS = 86400  # 24 hours (in seconds)
+PORT = int(os.environ.get('PORT', 10000))  # Render-compatible port
+# =================================================== #
 
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Bot is running!"
+    return "Bot is running and ready!"
 
 def run_flask():
-    app.run(host='0.0.0.0', port=10000)
+    app.run(host='0.0.0.0', port=PORT)
 
 BOT_TOKEN = os.environ['BOT_TOKEN']
 
@@ -52,12 +53,23 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         if post_id:
             post = posts[post_id]
+            minutes = DELETE_AFTER_SECONDS // 60
+            hours = minutes // 60
+            days = hours // 24
+            
+            duration = (
+                f"{days} day(s)" if days >= 1 else
+                f"{hours} hour(s)" if hours >= 1 else
+                f"{minutes} minute(s)"
+            )
+            
             message = f"""🎬 *{escape_markdown(post['title'], version=2)}*
 📅 {escape_markdown(post.get('date', 'N/A'), version=2)}
 
 🔗 {post['download_url']}
 
-_This message auto-deletes in {DELETE_AFTER_SECONDS // 60}m_"""
+_This message will auto-delete in {duration}_"""
+            
             msg = await update.message.reply_text(message, parse_mode='MarkdownV2')
             context.job_queue.run_once(
                 delete_message,
@@ -66,19 +78,23 @@ _This message auto-deletes in {DELETE_AFTER_SECONDS // 60}m_"""
                 message_id=msg.message_id
             )
         else:
-            await update.message.reply_text("❌ Invalid link! Use buttons from website.")
+            await update.message.reply_text("❌ Invalid link! Use only buttons from our website.")
             
     except Exception as e:
         print(f"Command error: {e}")
-        await update.message.reply_text("⚠️ Service temporary unavailable. Try again later.")
+        await update.message.reply_text("⚠️ Bot is updating. Please try again in 5 minutes.")
 
 async def main():
+    # Initialize bot
     bot_app = Application.builder().token(BOT_TOKEN).build()
     bot_app.add_handler(CommandHandler("start", start))
-    Thread(target=run_flask, daemon=True).start()
-    await bot_app.initialize()
-    await bot_app.start()
-    print("Bot is now running...")
+    
+    # Start Flask server in background
+    flask_thread = Thread(target=run_flask, daemon=True)
+    flask_thread.start()
+    
+    # Start bot polling
+    print("🤖 Bot is now running and ready!")
     await bot_app.run_polling()
 
 if __name__ == "__main__":
