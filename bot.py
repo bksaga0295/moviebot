@@ -9,7 +9,7 @@ from flask import Flask
 from threading import Thread
 
 # ================== CONFIGURATION ================== #
-DELETE_AFTER_SECONDS = 300  # 5 minutes
+DELETE_AFTER_SECONDS = 60  # 5 minutes
 MESSAGE_TEMPLATE = """🎬 *{title}*
 📅 {date}
 
@@ -80,18 +80,18 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("⚠️ Service temporary unavailable. Try again later.")
 
 async def main():
-    # Ensure single bot instance
+    # Initialize bot
     bot_app = Application.builder().token(BOT_TOKEN).build()
     bot_app.add_handler(CommandHandler("start", start))
     
-    # Run Flask in separate thread
+    # Start Flask in separate thread
     Thread(target=run_flask, daemon=True).start()
     
-    # Start polling with exclusive lock
+    # Start polling
     await bot_app.initialize()
     await bot_app.start()
-    await bot_app.updater.start_polling()
-    await bot_app.updater.idle()
+    print("Bot is now running...")
+    await bot_app.run_polling()
 
 if __name__ == "__main__":
     asyncio.run(main())
