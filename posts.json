@@ -2,16 +2,16 @@
     "POST1": {
         "title": "kya masti kya dhoom",
         "download_url": [
-            "https://mega.nz/file/c9pSwbaS#lx6tTRWiUqfU8udJG4hbWUPwQgXDjPjE9GKDKcBkNPs",
-            "https://backup.link/example"
+            "1080": "https://mega.nz/file/c9pSwbaS#lx6tTRWiUqfU8udJG4hbWUPwQgXDjPjE9GKDKcBkNPs",
+            "Click for more": "https://backup.link/example"
         ],
         "date": "2025-03-25"
     },
     "POST1A": {
         "title": "kya masti kya dhoom",
         "download_url": [
-            "https://go.arlinks.in/ctjq2S6",
-            "https://alternate.link/example"
+           "1080": "https://go.arlinks.in/ctjq2S6",
+           "Click for more": "https://alternate.link/example"
         ],
         "date": "2025-03-15"
     }
