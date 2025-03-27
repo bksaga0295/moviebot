@@ -4,7 +4,7 @@ import asyncio
 import nest_asyncio
 from urllib.parse import unquote
 from datetime import datetime
-from telegram import Update
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, ContextTypes, CallbackContext
 from flask import Flask
 from threading import Thread
@@ -85,27 +85,34 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         if post_id in posts:
             post = posts[post_id]
-            msg = [
-                f"🎬 *{post['title']}*",
-                f"📅 {post['date']}",
-                "\n📥 Download Links:"
-            ]
+            keyboard = []
             
-            # Handle multiple links
+            # Create buttons based on link type
             links = post['download_url']
             if isinstance(links, dict):
-                for name, url in links.items():
-                    msg.append(f"➤ {name}: {url}")
+                for btn_text, url in links.items():
+                    keyboard.append([InlineKeyboardButton(btn_text, url=url)])
             elif isinstance(links, list):
                 for i, url in enumerate(links, 1):
-                    msg.append(f"🔗 Part {i}: {url}")
-            else:
-                msg.append(f"🔗 {links}")
+                    keyboard.append([InlineKeyboardButton(f"Part {i}", url=url)])
+            else:  # Single link
+                keyboard.append([InlineKeyboardButton("Download Now", url=links)])
             
-            msg.append(f"\n_⏳ Auto-deletes in {DELETE_AFTER_HOURS} hours_")
+            reply_markup = InlineKeyboardMarkup(keyboard)
             
-            sent_msg = await update.message.reply_text("\n".join(msg), parse_mode='Markdown')
+            message = (
+                f"🎬 *{post['title']}*\n"
+                f"📅 {post['date']}\n\n"
+                f"_⏳ Auto-deletes in {DELETE_AFTER_HOURS} hours_"
+            )
             
+            sent_msg = await update.message.reply_text(
+                message,
+                parse_mode='Markdown',
+                reply_markup=reply_markup
+            )
+            
+            # Schedule deletion
             context.job_queue.run_once(
                 delete_message,
                 DELETE_AFTER_HOURS * 3600,
