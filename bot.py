@@ -8,13 +8,12 @@ from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes, CallbackContext
 from flask import Flask
 from threading import Thread
-from waitress import serve
 
 nest_asyncio.apply()
 
 # ========== CONFIGURATION ========== #
 DELETE_AFTER_HOURS = 24  # Auto-delete time (change here)
-PORT = int(os.environ.get('PORT', 10000))
+PORT = 10000             # Render port
 # =================================== #
 
 app = Flask(__name__)
@@ -24,23 +23,24 @@ def home():
     return "Bot is running!"
 
 def run_flask():
-    serve(app, host='0.0.0.0', port=PORT)
+    app.run(host='0.0.0.0', port=PORT)
 
 BOT_TOKEN = os.environ['BOT_TOKEN']
 
 def load_posts():
     try:
+        # Load current posts
         with open("posts.json", "r") as f:
             current = json.load(f)
         
-        old_posts = {}
+        # Load old posts
         try:
             with open("old_post.json", "r") as f:
-                old_posts = json.load(f)
+                old = json.load(f)
         except FileNotFoundError:
-            pass
+            old = {}
 
-        # Auto-clean old posts
+        # Move posts older than 7 days
         cutoff = datetime.now().timestamp() - (7 * 86400)
         moved = []
         
@@ -48,18 +48,18 @@ def load_posts():
             try:
                 post_time = datetime.strptime(current[pid]["date"], "%Y-%m-%d").timestamp()
                 if post_time < cutoff:
-                    old_posts[pid] = current.pop(pid)
+                    old[pid] = current.pop(pid)
                     moved.append(pid)
             except:
                 continue
 
         if moved:
             with open("old_post.json", "w") as f:
-                json.dump(old_posts, f)
+                json.dump(old, f)
             with open("posts.json", "w") as f:
                 json.dump(current, f)
 
-        return {**old_posts, **current}
+        return {**old, **current}
         
     except Exception as e:
         print(f"Post error: {e}")
@@ -91,7 +91,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 "\n📥 Download Links:"
             ]
             
-            # Handle all link formats
+            # Handle multiple links
             links = post['download_url']
             if isinstance(links, dict):
                 for name, url in links.items():
@@ -120,17 +120,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("⚠️ Temporary service issue. Try again later.")
 
 async def main():
-    # Stop any existing instances
-    await Application.builder().token(BOT_TOKEN).build().stop()
-    
-    # Initialize new bot
+    Thread(target=run_flask, daemon=True).start()
     bot_app = Application.builder().token(BOT_TOKEN).build()
     bot_app.add_handler(CommandHandler("start", start))
-    
-    # Start production server
-    Thread(target=run_flask, daemon=True).start()
-    
-    print("🤖 Bot started successfully!")
     await bot_app.run_polling()
 
 if __name__ == "__main__":
