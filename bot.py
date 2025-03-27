@@ -12,8 +12,8 @@ from threading import Thread
 nest_asyncio.apply()
 
 # ========== CONFIGURATION ========== #
-DELETE_AFTER_HOURS = 24  # Auto-delete time (change here)
-PORT = 10000             # Render port
+DELETE_AFTER_HOURS = 24
+PORT = 10000
 # =================================== #
 
 app = Flask(__name__)
@@ -29,18 +29,16 @@ BOT_TOKEN = os.environ['BOT_TOKEN']
 
 def load_posts():
     try:
-        # Load current posts
         with open("posts.json", "r") as f:
             current = json.load(f)
         
-        # Load old posts
+        old_posts = {}
         try:
             with open("old_post.json", "r") as f:
-                old = json.load(f)
+                old_posts = json.load(f)
         except FileNotFoundError:
-            old = {}
+            pass
 
-        # Move posts older than 7 days
         cutoff = datetime.now().timestamp() - (7 * 86400)
         moved = []
         
@@ -48,18 +46,18 @@ def load_posts():
             try:
                 post_time = datetime.strptime(current[pid]["date"], "%Y-%m-%d").timestamp()
                 if post_time < cutoff:
-                    old[pid] = current.pop(pid)
+                    old_posts[pid] = current.pop(pid)
                     moved.append(pid)
             except:
                 continue
 
         if moved:
             with open("old_post.json", "w") as f:
-                json.dump(old, f)
+                json.dump(old_posts, f)
             with open("posts.json", "w") as f:
                 json.dump(current, f)
 
-        return {**old, **current}
+        return {**old_posts, **current}
         
     except Exception as e:
         print(f"Post error: {e}")
@@ -87,16 +85,27 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
             post = posts[post_id]
             keyboard = []
             
-            # Create buttons based on link type
-            links = post['download_url']
-            if isinstance(links, dict):
-                for btn_text, url in links.items():
-                    keyboard.append([InlineKeyboardButton(btn_text, url=url)])
-            elif isinstance(links, list):
-                for i, url in enumerate(links, 1):
-                    keyboard.append([InlineKeyboardButton(f"Part {i}", url=url)])
-            else:  # Single link
-                keyboard.append([InlineKeyboardButton("Download Now", url=links)])
+            # Direct open links without confirmation
+            if isinstance(post['download_url'], dict):
+                for btn_text, url in post['download_url'].items():
+                    keyboard.append([InlineKeyboardButton(
+                        text=btn_text,
+                        url=url,
+                        callback_data="dummy"  # Bypass confirmation
+                    )])
+            elif isinstance(post['download_url'], list):
+                for i, url in enumerate(post['download_url'], 1):
+                    keyboard.append([InlineKeyboardButton(
+                        text=f"Part {i}",
+                        url=url,
+                        callback_data="dummy"
+                    )])
+            else:
+                keyboard.append([InlineKeyboardButton(
+                    text="Download Now",
+                    url=post['download_url'],
+                    callback_data="dummy"
+                )])
             
             reply_markup = InlineKeyboardMarkup(keyboard)
             
@@ -112,7 +121,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 reply_markup=reply_markup
             )
             
-            # Schedule deletion
             context.job_queue.run_once(
                 delete_message,
                 DELETE_AFTER_HOURS * 3600,
